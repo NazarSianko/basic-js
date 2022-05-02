@@ -14,61 +14,60 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 function transform(arr) {
-  if (!Array.isArray(arr)) {
+ if (!Array.isArray(arr)) {
     throw new Error ("'arr' parameter must be an instance of the Array!")
   }
   let arr1 = arr.slice();
-   arr1.forEach((el,i) => {
+  
     
-    if (el == '--double-next' && i !== 0 && i !== arr1.length-1) {
-      
-        arr1.splice(i,1,i+1);
-      
-    
+  for(let i = 0;i<arr1.length;i++ ){
+  
+
+  
+
+switch(arr1[i]){
+  
+  case '--discard-next':
+    if (arr1[i+1] == undefined) {
+    arr1.splice(i,1);
     }
-    if (el == '--double-next' &&  i == arr1.length-1)
-    {
+    else {
+      arr1.splice(i,2);
+    }
+    break;
+  
+  case '--discard-prev':
+    if (arr1[i-1] == undefined) {
+    arr1.splice(i,1);
+    }
+    else {
+      arr1.splice(i-1,2);
+    }
+    break;
+  case '--double-next':
+    if (arr1[i+1] == undefined) {
       arr1.splice(i,1);
+      }
+      else {
+        arr1.splice(i,0,arr1[i+1]);
+      }
+
+    break;
+  case '--double-prev':  
+  if (arr1[i-1] == undefined) {
+    arr1.splice(i,1);
+    }
+    else {
+      arr1.splice(i-1,0,arr1[i-1]);
     }
 
-    if (el == '--discard-prev'  && i !== 0 && i !== arr1.length-1) {
-     
-      arr1.splice(i,1);
-      arr1.splice(i-1,1);
-
-      
-    }
-    if (el == '--discard-prev' && i == 0)
-    {
-      arr1.splice(i,1);
-    }
-    if (el == '--discard-next'  && i !== 0 && i !== arr1.length-1) {
-     
-      arr1.splice(i,1);
-      arr1.splice(i,1)
-    
+  break;
+}
   }
-  if (el == '--discard-next' &&  i == arr1.length-1)
-    {
-      arr1.splice(i,1);
-    }
-    if (el == '--double-prev'  && i !== 0 && i !== arr1.length-1) {
-    
-      arr1.splice(i,1,i);
-    
-  } 
-  if (el == '--double-prev' && i == 0 )
-    {
-      arr1.splice(i,1);
-    }
-  })
   return arr1;
   
 }
-console.log(transform([1, 2, 3, '--discard-next', 1337, '--discard-next', 4, 5]))
-/*['--double-prev', 1, 2, 3],
-[1, 2, 3, '--double-next'],
-[1, 2, 3, '--discard-next']*/
+
 module.exports = {
   transform
 };
